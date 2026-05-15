@@ -1,0 +1,1159 @@
+/* ==========================================================
+   1️⃣  VARIÁVEIS DE DESIGN
+   ========================================================== */
+:root{
+  --bg-body:#111;
+  --bg-navbar:#1c1c1c;
+  --bg-card:#1c1c1c;
+  --bg-drawer:#1c1c1c;
+  --bg-sidebar:#1a1a1a;
+  --bg-modal:rgba(0,0,0,0.8);
+  --accent:#ff9900;
+  --accent-hover:#ffb700;
+  --txt-primary:#fff;
+  --txt-secondary:#ffcc00;
+  --font-base:Arial, Helvetica, sans-serif;
+}
+
+/* ==========================================================
+   2️⃣  RESET GERAL
+   ========================================================== */
+*,*::before,*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:var(--font-base);
+}
+
+body{
+  background:var(--bg-body);
+  color:var(--txt-primary);
+  line-height:1.5;
+}
+
+/* ==========================================================
+   3️⃣  NAVBAR
+   ========================================================== */
+header.navbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:var(--bg-navbar);
+  border-bottom:2px solid var(--accent);
+}
+.logo img{width:170px;height:auto;}
+
+/* Botão hambúrguer */
+.menu-btn{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+.menu-btn span{
+  width:28px;height:3px;
+  background:var(--txt-primary);
+  border-radius:5px;
+}
+
+/* ==========================================================
+   4️⃣  MENU LATERAL COM SCROLL
+   ========================================================== */
+.sidebar-menu{
+  position:fixed;
+  left:0;
+  top:0;
+  width:280px;
+  height:100vh;
+  background:var(--bg-sidebar);
+  color:var(--txt-primary);
+  padding:20px 0;
+  overflow-y:auto;
+  transform:translateX(-100%);
+  transition:transform .35s ease-out;
+  z-index:1200;
+  border-right:3px solid var(--accent);
+}
+
+.sidebar-menu.open{
+  transform:translateX(0);
+}
+
+.menu-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 20px 20px;
+  border-bottom:1px solid #333;
+}
+.menu-header h3{
+  font-size:24px;
+  color:var(--txt-secondary);
+}
+
+.close-menu{
+  background:none;
+  border:none;
+  color:var(--txt-primary);
+  font-size:28px;
+  cursor:pointer;
+}
+
+/* Items do menu lateral */
+.menu-items{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.menu-item{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:18px 20px;
+  color:var(--txt-primary);
+  text-decoration:none;
+  font-size:18px;
+  transition:all .3s;
+  border-left:4px solid transparent;
+}
+
+.menu-item:hover{
+  background:rgba(255,153,0,0.1);
+  border-left-color:var(--accent);
+  color:var(--accent);
+}
+
+.menu-icon{
+  font-size:24px;
+  min-width:24px;
+}
+
+/* Scrollbar personalizada */
+.sidebar-menu::-webkit-scrollbar{
+  width:8px;
+}
+.sidebar-menu::-webkit-scrollbar-track{
+  background:rgba(0,0,0,0.3);
+}
+.sidebar-menu::-webkit-scrollbar-thumb{
+  background:var(--accent);
+  border-radius:4px;
+}
+.sidebar-menu::-webkit-scrollbar-thumb:hover{
+  background:var(--accent-hover);
+}
+
+/* ==========================================================
+   5️⃣  DRAWER (Carrinho, Sidebar, Sugestões)
+   ========================================================== */
+.sidebar-drawer,
+.cart-drawer,
+.suggestion-drawer{
+  position:fixed;
+  top:0;
+  right:0;
+  width:340px;
+  height:100vh;
+  background:var(--bg-drawer);
+  color:var(--txt-primary);
+  box-shadow:-5px 0 15px rgba(0,0,0,.6);
+  padding:20px;
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform .35s ease-out;
+  z-index:1200;
+}
+
+.sidebar-drawer.open,
+.cart-drawer.open,
+.suggestion-drawer.open{
+  transform:translateX(0);
+}
+
+.close-drawer{
+  background:none;
+  border:none;
+  color:var(--txt-primary);
+  font-size:30px;
+  cursor:pointer;
+  position:absolute;
+  top:12px;
+  right:12px;
+}
+
+.sidebar-drawer h3,
+.cart-drawer h3,
+.suggestion-drawer h3{
+  margin:30px 0 15px;
+  font-size:22px;
+}
+
+.drawer-items{
+  margin-top:20px;
+}
+.drawer-items p.empty{
+  font-size:16px;
+  color:#aaa;
+}
+
+.sidebar-drawer .total,
+.cart-drawer .total{
+  background:var(--accent);
+  color:#111;
+  text-align:center;
+  padding:12px;
+  border-radius:10px;
+  font-size:20px;
+  font-weight:bold;
+  margin-top:20px;
+}
+
+/* ==========================================================
+   6️⃣  HERO
+   ========================================================== */
+.hero{
+  text-align:center;
+  padding:140px 20px;
+  background:
+    linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("./Imagem de fundo.jpg") center/cover no-repeat;
+}
+.hero h1{font-size:55px;margin-bottom:20px;}
+.hero p{font-size:22px;margin-bottom:30px;}
+.cta-btn{
+  padding:16px 34px;
+  border:none;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--txt-primary);
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+.cta-btn:hover{
+  transform:scale(1.05);
+  background:var(--accent-hover);
+}
+
+/* ==========================================================
+   7️⃣  SEÇÕES DE CONTEÚDO (Pedidos, Combos, etc.)
+   ========================================================== */
+.section-content{
+  max-width:950px;
+  margin:60px auto;
+  padding:30px;
+  text-align:center;
+}
+.section-content h2{
+  font-size:40px;
+  color:var(--txt-secondary);
+  margin-bottom:20px;
+}
+.section-content p{
+  font-size:18px;
+  margin-bottom:20px;
+}
+.placeholder{
+  background:var(--bg-card);
+  padding:40px;
+  border-radius:12px;
+  font-size:22px;
+  color:#999;
+}
+
+/* ==========================================================
+   8️⃣  CARDÁPIO (SERVICES)
+   ========================================================== */
+.services{
+  max-width:950px;
+  margin:60px auto;
+  padding:30px;
+}
+.services h2{
+  text-align:center;
+  margin-bottom:40px;
+  color:var(--txt-secondary);
+  font-size:40px;
+}
+.categoria{
+  background:var(--bg-card);
+  padding:35px;
+  border-radius:20px;
+  margin-bottom:35px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+.categoria h3{
+  margin-bottom:25px;
+  color:var(--accent);
+  font-size:30px;
+}
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 0;
+  border-bottom:1px solid #333;
+  font-size:19px;
+}
+.item:last-child{border-bottom:none;}
+.controle{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.controle button{
+  width:44px;height:44px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--txt-primary);
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+.controle button:hover{transform:scale(1.08);}
+.quantidade{
+  min-width:25px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+.total{
+  background:var(--accent);
+  color:#111;
+  text-align:center;
+  padding:28px;
+  border-radius:20px;
+  font-size:34px;
+  font-weight:bold;
+  margin-top:35px;
+}
+
+/* ==========================================================
+   9️⃣  MODAL
+   ========================================================== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:var(--bg-modal);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1500;
+}
+.modal-content{
+  background:var(--bg-card);
+  padding:30px;
+  border-radius:12px;
+  width:90%;
+  max-width:700px;
+  position:relative;
+}
+.modal-content h3{
+  margin:0 0 25px;
+  text-align:center;
+  font-size:28px;
+  color:var(--txt-secondary);
+}
+.close-modal{
+  background:none;
+  border:none;
+  color:var(--txt-primary);
+  font-size:30px;
+  cursor:pointer;
+  position:absolute;
+  top:12px;
+  right:12px;
+}
+.combo-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.combo-item{
+  background:var(--bg-drawer);
+  padding:18px;
+  border-radius:10px;
+  text-align:center;
+}
+.combo-item h4{
+  margin:0 0 10px;
+  font-size:20px;
+  color:var(--accent);
+}
+.combo-item p{margin:5px 0;font-size:15px;}
+.combo-item .price{
+  font-weight:bold;
+  margin:10px 0;
+  color:var(--txt-secondary);
+}
+.combo-item .add-combo{
+  margin-top:8px;
+  padding:8px 14px;
+  background:var(--accent);
+  border:none;
+  border-radius:8px;
+  color:var(--txt-primary);
+  cursor:pointer;
+  transition:background .2s;
+}
+.combo-item .add-combo:hover{background:var(--accent-hover);}
+
+/* ==========================================================
+   🔟  CONTATO
+   ========================================================== */
+.contact{
+  background:var(--bg-navbar);
+  padding:70px 20px;
+}
+.contact h2{
+  text-align:center;
+  margin-bottom:35px;
+  font-size:38px;
+  color:var(--txt-secondary);
+}
+form{
+  max-width:650px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+input,textarea{
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+}
+.submit-btn{
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--txt-primary);
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+.submit-btn:hover{
+  transform:scale(1.03);
+  background:var(--accent-hover);
+}
+
+/* ==========================================================
+   1️⃣1️⃣  RESPONSIVO
+   ========================================================== */
+@media(max-width:768px){
+  .menu-btn{display:flex;}
+  
+  .sidebar-menu{width:240px;}
+  .menu-item{font-size:16px;padding:15px 15px;}
+  .menu-icon{font-size:20px;}
+  
+  .hero{padding:100px 20px;}
+  .hero h1{font-size:38px;}
+  .hero p{font-size:18px;}
+  
+  .services{padding:15px;}
+  
+  .item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+  }
+  .controle{width:100%;justify-content:flex-end;}
+}
+
+/* ==========================================================
+   1️⃣2️⃣  UTILIDADES
+   ========================================================== */
+.hidden{display:none!important;}/* =====================================================
+   RESET
+===================================================== */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#111;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
+
+:root{
+
+  --bg:#1c1c1c;
+  --accent:#ff9900;
+  --accent-hover:#ffb700;
+  --yellow:#ffcc00;
+  --white:#ffffff;
+
+}
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100vh;
+
+  background:rgba(0,0,0,0.6);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:0.3s;
+
+  z-index:2000;
+
+}
+
+.overlay.active{
+
+  opacity:1;
+  visibility:visible;
+
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+  width:100%;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:15px 40px;
+
+  background:#151515;
+
+  border-bottom:2px solid var(--accent);
+
+  position:sticky;
+
+  top:0;
+
+  z-index:3000;
+
+}
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.logo img{
+
+  width:170px;
+
+  display:block;
+
+  object-fit:contain;
+
+}
+
+/* =====================================================
+   BOTÃO MENU
+===================================================== */
+
+.menu-btn{
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:6px;
+
+  width:55px;
+
+  height:55px;
+
+  background:var(--accent);
+
+  border:none;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+  z-index:5000;
+
+}
+
+.menu-btn:hover{
+
+  background:var(--accent-hover);
+
+  transform:scale(1.05);
+
+}
+
+.menu-btn span{
+
+  width:30px;
+
+  height:4px;
+
+  background:#111;
+
+  border-radius:20px;
+
+}
+
+/* =====================================================
+   MENU LATERAL
+===================================================== */
+
+.nav-links{
+
+  position:fixed;
+
+  top:0;
+
+  right:-100%;
+
+  width:320px;
+
+  height:100vh;
+
+  background:#181818;
+
+  display:flex;
+
+  flex-direction:column;
+
+  padding-top:90px;
+
+  transition:0.4s ease;
+
+  z-index:4000;
+
+  border-left:3px solid var(--accent);
+
+  overflow-y:auto;
+
+  overflow-x:hidden;
+
+  scrollbar-width:thin;
+
+  scrollbar-color:var(--accent) #111;
+
+}
+
+/* SCROLLBAR */
+
+.nav-links::-webkit-scrollbar{
+
+  width:8px;
+
+}
+
+.nav-links::-webkit-scrollbar-track{
+
+  background:#111;
+
+}
+
+.nav-links::-webkit-scrollbar-thumb{
+
+  background:var(--accent);
+
+  border-radius:20px;
+
+}
+
+/* MENU ABERTO */
+
+.nav-links.open{
+
+  right:0;
+
+}
+
+/* LINKS */
+
+.nav-links a{
+
+  width:100%;
+
+  padding:22px 28px;
+
+  color:#fff;
+
+  text-decoration:none;
+
+  font-size:20px;
+
+  font-weight:bold;
+
+  border-bottom:1px solid #333;
+
+  transition:0.3s;
+
+}
+
+.nav-links a:hover{
+
+  background:var(--accent);
+
+  color:#111;
+
+  padding-left:38px;
+
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+  min-height:90vh;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  text-align:center;
+
+  padding:100px 20px;
+
+  background:
+  linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+  url("Imagem de fundo.jpg");
+
+  background-size:cover;
+
+  background-position:center;
+
+}
+
+.hero h1{
+
+  font-size:58px;
+
+  margin-bottom:20px;
+
+  color:var(--white);
+
+}
+
+.hero p{
+
+  max-width:850px;
+
+  font-size:22px;
+
+  margin-bottom:35px;
+
+  line-height:1.6;
+
+  color:#f1f1f1;
+
+}
+
+/* =====================================================
+   BOTÃO PRINCIPAL
+===================================================== */
+
+.cta-btn{
+
+  text-decoration:none;
+
+  background:var(--accent);
+
+  color:#fff;
+
+  padding:18px 35px;
+
+  border-radius:12px;
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  transition:0.3s;
+
+  display:inline-block;
+
+}
+
+.cta-btn:hover{
+
+  background:var(--accent-hover);
+
+  transform:scale(1.05);
+
+}
+
+/* =====================================================
+   SEÇÕES
+===================================================== */
+
+.services,
+.contact{
+
+  max-width:1200px;
+
+  margin:70px auto;
+
+  padding:20px;
+
+  display:none;
+
+}
+
+.services h2,
+.contact h2{
+
+  text-align:center;
+
+  color:var(--yellow);
+
+  font-size:42px;
+
+  margin-bottom:40px;
+
+}
+
+/* =====================================================
+   CATEGORIAS
+===================================================== */
+
+.categoria{
+
+  background:var(--bg);
+
+  padding:30px;
+
+  border-radius:20px;
+
+  margin-bottom:35px;
+
+  box-shadow:0 5px 20px rgba(0,0,0,0.4);
+
+}
+
+/* =====================================================
+   ITENS
+===================================================== */
+
+.item{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:20px;
+
+  padding:25px 0;
+
+  border-bottom:1px solid #333;
+
+}
+
+.item:last-child{
+
+  border-bottom:none;
+
+}
+
+.item h3{
+
+  color:var(--yellow);
+
+  margin-bottom:10px;
+
+  font-size:24px;
+
+}
+
+.item p{
+
+  color:#ccc;
+
+  line-height:1.6;
+
+}
+
+/* =====================================================
+   BOTÕES DOS ITENS
+===================================================== */
+
+.item button,
+.controle button{
+
+  border:none;
+
+  background:var(--accent);
+
+  color:#fff;
+
+  padding:12px 22px;
+
+  border-radius:10px;
+
+  cursor:pointer;
+
+  font-weight:bold;
+
+  transition:0.3s;
+
+}
+
+.item button:hover,
+.controle button:hover{
+
+  background:var(--accent-hover);
+
+  transform:scale(1.05);
+
+}
+
+/* =====================================================
+   CONTROLE QUANTIDADE
+===================================================== */
+
+.controle{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+}
+
+.controle button{
+
+  width:45px;
+
+  height:45px;
+
+  font-size:22px;
+
+  padding:0;
+
+}
+
+.quantidade{
+
+  font-size:22px;
+
+  font-weight:bold;
+
+  min-width:25px;
+
+  text-align:center;
+
+}
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.total{
+
+  background:var(--accent);
+
+  color:#111;
+
+  text-align:center;
+
+  padding:28px;
+
+  border-radius:20px;
+
+  font-size:34px;
+
+  font-weight:bold;
+
+  margin-top:35px;
+
+}
+
+/* =====================================================
+   FORMULÁRIOS
+===================================================== */
+
+form{
+
+  max-width:700px;
+
+  margin:auto;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:20px;
+
+}
+
+input,
+textarea{
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:12px;
+
+  font-size:16px;
+
+  outline:none;
+
+  background:#fff;
+
+  color:#111;
+
+}
+
+textarea{
+
+  resize:none;
+
+}
+
+.submit-btn{
+
+  border:none;
+
+  background:var(--accent);
+
+  color:#fff;
+
+  padding:16px;
+
+  border-radius:12px;
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+}
+
+.submit-btn:hover{
+
+  background:var(--accent-hover);
+
+  transform:scale(1.03);
+
+}
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media(max-width:768px){
+
+  .navbar{
+
+    padding:15px 20px;
+
+  }
+
+  .logo img{
+
+    width:140px;
+
+  }
+
+  .hero{
+
+    padding:90px 20px;
+
+  }
+
+  .hero h1{
+
+    font-size:38px;
+
+  }
+
+  .hero p{
+
+    font-size:18px;
+
+  }
+
+  .services h2,
+  .contact h2{
+
+    font-size:32px;
+
+  }
+
+  .item{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+  }
+
+  .controle{
+
+    width:100%;
+
+    justify-content:flex-end;
+
+  }
+
+  .nav-links{
+
+    width:100%;
+
+  }
+
+}

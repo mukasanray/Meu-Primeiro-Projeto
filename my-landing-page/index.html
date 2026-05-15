@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Delicious Burger</title>
+
+  <style>
+
+    /* =====================================================
+       RESET
+    ====================================================== */
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:#111;
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    :root{
+      --bg:#1c1c1c;
+      --accent:#ff9900;
+      --accent-hover:#ffb700;
+      --yellow:#ffcc00;
+    }
+
+    /* =====================================================
+       OVERLAY
+    ====================================================== */
+
+    .overlay{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100vh;
+      background:rgba(0,0,0,0.6);
+      opacity:0;
+      visibility:hidden;
+      transition:0.3s;
+      z-index:2000;
+    }
+
+    .overlay.active{
+      opacity:1;
+      visibility:visible;
+    }
+
+    /* =====================================================
+       NAVBAR
+    ====================================================== */
+
+    .navbar{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:15px 40px;
+      background:#151515;
+      border-bottom:2px solid var(--accent);
+      position:sticky;
+      top:0;
+      z-index:3000;
+    }
+
+    .logo img{
+      width:170px;
+      display:block;
+    }
+
+    /* =====================================================
+       BOTÃO MENU
+    ====================================================== */
+
+    .menu-btn{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+      width:55px;
+      height:55px;
+      background:var(--accent);
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      transition:0.3s;
+      z-index:5000;
+    }
+
+    .menu-btn:hover{
+      background:var(--accent-hover);
+      transform:scale(1.05);
+    }
+
+    .menu-btn span{
+      width:30px;
+      height:4px;
+      background:#111;
+      border-radius:20px;
+    }
+
+    /* =====================================================
+       MENU LATERAL
+    ====================================================== */
+
+    .nav-links{
+      position:fixed;
+      top:0;
+      right:-100%;
+      width:320px;
+      height:100vh;
+      background:#181818;
+      display:flex;
+      flex-direction:column;
+      padding-top:90px;
+      transition:0.4s ease;
+      z-index:4000;
+      border-left:3px solid var(--accent);
+      overflow-y:auto;
+    }
+
+    .nav-links.open{
+      right:0;
+    }
+
+    .nav-links a{
+      width:100%;
+      padding:22px 28px;
+      color:#fff;
+      text-decoration:none;
+      font-size:20px;
+      font-weight:bold;
+      border-bottom:1px solid #333;
+      transition:0.3s;
+    }
+
+    .nav-links a:hover{
+      background:var(--accent);
+      color:#111;
+      padding-left:38px;
+    }
+
+    /* =====================================================
+       HERO
+    ====================================================== */
+
+    .hero{
+      min-height:90vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:100px 20px;
+      background:
+      linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+      url("Imagem de fundo.jpg");
+      background-size:cover;
+      background-position:center;
+    }
+
+    .hero h1{
+      font-size:58px;
+      margin-bottom:20px;
+    }
+
+    .hero p{
+      max-width:850px;
+      font-size:22px;
+      margin-bottom:35px;
+      line-height:1.6;
+    }
+
+    .cta-btn{
+      text-decoration:none;
+      background:var(--accent);
+      color:#fff;
+      padding:18px 35px;
+      border-radius:12px;
+      font-size:18px;
+      font-weight:bold;
+      transition:0.3s;
+    }
+
+    .cta-btn:hover{
+      background:var(--accent-hover);
+      transform:scale(1.05);
+    }
+
+    /* =====================================================
+       SEÇÕES
+    ====================================================== */
+
+    .services,
+    .contact{
+      max-width:1200px;
+      margin:70px auto;
+      padding:20px;
+      display:none;
+    }
+
+    .services h2,
+    .contact h2{
+      text-align:center;
+      color:var(--yellow);
+      font-size:42px;
+      margin-bottom:40px;
+    }
+
+    /* =====================================================
+       CATEGORIAS
+    ====================================================== */
+
+    .categoria{
+      background:var(--bg);
+      padding:30px;
+      border-radius:20px;
+      margin-bottom:35px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.4);
+    }
+
+    /* =====================================================
+       ITENS
+    ====================================================== */
+
+    .item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      padding:25px 0;
+      border-bottom:1px solid #333;
+    }
+
+    .item:last-child{
+      border-bottom:none;
+    }
+
+    .item h3{
+      color:var(--yellow);
+      margin-bottom:10px;
+      font-size:24px;
+    }
+
+    .item p{
+      color:#ccc;
+      line-height:1.6;
+    }
+
+    /* =====================================================
+       BOTÕES
+    ====================================================== */
+
+    .item button,
+    .controle button{
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      padding:12px 22px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:0.3s;
+    }
+
+    .item button:hover,
+    .controle button:hover{
+      background:var(--accent-hover);
+      transform:scale(1.05);
+    }
+
+    .controle{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .controle button{
+      width:45px;
+      height:45px;
+      font-size:22px;
+      padding:0;
+    }
+
+    .quantidade{
+      font-size:22px;
+      font-weight:bold;
+      min-width:25px;
+      text-align:center;
+    }
+
+    /* =====================================================
+       TOTAL
+    ====================================================== */
+
+    .total{
+      background:var(--accent);
+      color:#111;
+      text-align:center;
+      padding:28px;
+      border-radius:20px;
+      font-size:34px;
+      font-weight:bold;
+      margin-top:35px;
+    }
+
+    /* =====================================================
+       FORMULÁRIOS
+    ====================================================== */
+
+    form{
+      max-width:700px;
+      margin:auto;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    input,
+    textarea{
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      font-size:16px;
+      outline:none;
+    }
+
+    textarea{
+      resize:none;
+    }
+
+    .submit-btn{
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      padding:16px;
+      border-radius:12px;
+      font-size:18px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    /* =====================================================
+       RESPONSIVO
+    ====================================================== */
+
+    @media(max-width:768px){
+
+      .navbar{
+        padding:15px 20px;
+      }
+
+      .logo img{
+        width:140px;
+      }
+
+      .hero h1{
+        font-size:38px;
+      }
+
+      .hero p{
+        font-size:18px;
+      }
+
+      .services h2,
+      .contact h2{
+        font-size:32px;
+      }
+
+      .item{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .controle{
+        width:100%;
+        justify-content:flex-end;
+      }
+
+      .nav-links{
+        width:100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- =====================================================
+       OVERLAY
+  ====================================================== -->
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header class="navbar">
+
+    <div class="logo">
+      <img src="Logo tipo.png" alt="Logo Delicious Burger">
+    </div>
+
+    <!-- BOTÃO MENU -->
+
+    <button class="menu-btn" id="menuBtn">
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </button>
+
+    <!-- MENU LATERAL -->
+
+    <nav class="nav-links" id="nav">
+
+      <a href="#promocoes">🍔 Pedidos</a>
+
+      <a href="#combos">🔥 Combos</a>
+
+      <a href="#hamburgueres">🍔 Hambúrgueres</a>
+
+      <a href="#molhos">🥫 Molhos</a>
+
+      <a href="#bebidas">🥤 Bebidas</a>
+
+      <a href="#sorvetes">🍦 Sorvetes</a>
+
+      <a href="#adicionais">🧀 Adicionais</a>
+
+      <a href="#contact">📞 Contato</a>
+
+      <a href="#suggestions">💬 Sugestões</a>
+
+    </nav>
+
+  </header>
+
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <section class="hero">
+
+    <h1>🍔 Bem-vindo à Delicious Burger</h1>
+
+    <p>
+
+      Hambúrgueres artesanais preparados com ingredientes frescos,
+      sabor intenso e qualidade premium.
+
+    </p>
+
+    <a href="#promocoes" class="cta-btn">
+
+      Fazer Pedido
+
+    </a>
+
+  </section>
+
+  <!-- =====================================================
+       PEDIDOS
+  ====================================================== -->
+
+  <section id="promocoes" class="services">
+
+    <h2>🍔 Monte Seu Pedido</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <div>
+
+          <h3>🍔 Single Burger</h3>
+
+          <p>
+            Hambúrguer artesanal,
+            cheddar e molho especial.
+          </p>
+
+        </div>
+
+        <button>Selecionar</button>
+
+      </div>
+
+      <div class="item">
+
+        <div>
+
+          <h3>🍔🍔 Double Burger</h3>
+
+          <p>
+            Duas carnes artesanais,
+            bacon crocante e cheddar duplo.
+          </p>
+
+        </div>
+
+        <button>Selecionar</button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       COMBOS
+  ====================================================== -->
+
+  <section id="combos" class="services">
+
+    <h2>🔥 Combos</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <div>
+
+          <h3>🔥 Combo Supremo</h3>
+
+          <p>
+            Hambúrguer premium,
+            batata frita e refrigerante.
+          </p>
+
+        </div>
+
+        <button>Selecionar</button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       HAMBÚRGUERES
+  ====================================================== -->
+
+  <section id="hamburgueres" class="services">
+
+    <h2>🍔 Hambúrgueres</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <div>
+
+          <h3>🧀 Cheddar Burger</h3>
+
+          <p>
+            Muito cheddar cremoso
+            e carne artesanal.
+          </p>
+
+        </div>
+
+        <button>Selecionar</button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       MOLHOS
+  ====================================================== -->
+
+  <section id="molhos" class="services">
+
+    <h2>🥫 Molhos</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <span>Ketchup Artesanal + R$2</span>
+
+        <div class="controle">
+
+          <button onclick="alterar('ketchup',-1,2)">-</button>
+
+          <span id="ketchup" class="quantidade">0</span>
+
+          <button onclick="alterar('ketchup',1,2)">+</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       BEBIDAS
+  ====================================================== -->
+
+  <section id="bebidas" class="services">
+
+    <h2>🥤 Bebidas</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <span>Refrigerante + R$8</span>
+
+        <div class="controle">
+
+          <button onclick="alterar('refri',-1,8)">-</button>
+
+          <span id="refri" class="quantidade">0</span>
+
+          <button onclick="alterar('refri',1,8)">+</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       SORVETES
+  ====================================================== -->
+
+  <section id="sorvetes" class="services">
+
+    <h2>🍦 Sorvetes</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <span>Sorvete Cremoso + R$10</span>
+
+        <div class="controle">
+
+          <button onclick="alterar('sorvete',-1,10)">-</button>
+
+          <span id="sorvete" class="quantidade">0</span>
+
+          <button onclick="alterar('sorvete',1,10)">+</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       ADICIONAIS
+  ====================================================== -->
+
+  <section id="adicionais" class="services">
+
+    <h2>🧀 Adicionais</h2>
+
+    <div class="categoria">
+
+      <div class="item">
+
+        <span>Bacon Crocante + R$5</span>
+
+        <div class="controle">
+
+          <button onclick="alterar('bacon',-1,5)">-</button>
+
+          <span id="bacon" class="quantidade">0</span>
+
+          <button onclick="alterar('bacon',1,5)">+</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="total">
+
+      Total: R$
+      <span id="total">0.00</span>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       CONTATO
+  ====================================================== -->
+
+  <section id="contact" class="contact">
+
+    <h2>📞 Contato</h2>
+
+    <form>
+
+      <input type="text" placeholder="Seu nome">
+
+      <input type="email" placeholder="Seu e-mail">
+
+      <textarea rows="5" placeholder="Digite sua mensagem"></textarea>
+
+      <button type="submit" class="submit-btn">
+
+        Enviar
+
+      </button>
+
+    </form>
+
+  </section>
+
+  <!-- =====================================================
+       SUGESTÕES
+  ====================================================== -->
+
+  <section id="suggestions" class="contact">
+
+    <h2>💬 Sugestões</h2>
+
+    <form>
+
+      <input type="text" placeholder="Seu nome">
+
+      <textarea rows="5" placeholder="Digite sua sugestão"></textarea>
+
+      <button type="submit" class="submit-btn">
+
+        Enviar Sugestão
+
+      </button>
+
+    </form>
+
+  </section>
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script>
+
+    const menuBtn = document.getElementById('menuBtn');
+
+    const nav = document.getElementById('nav');
+
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+
+      nav.classList.toggle('open');
+
+      overlay.classList.toggle('active');
+
+    });
+
+    overlay.addEventListener('click', () => {
+
+      nav.classList.remove('open');
+
+      overlay.classList.remove('active');
+
+    });
+
+    /* =====================================================
+       MOSTRAR SEÇÃO AO CLICAR
+    ====================================================== */
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+
+      link.addEventListener('click', function(e){
+
+        e.preventDefault();
+
+        document.querySelectorAll('.services').forEach(secao => {
+
+          secao.style.display = 'none';
+
+        });
+
+        document.querySelectorAll('.contact').forEach(secao => {
+
+          secao.style.display = 'none';
+
+        });
+
+        const destinoID = this.getAttribute('href');
+
+        const destino = document.querySelector(destinoID);
+
+        if(destino){
+
+          destino.style.display = 'block';
+
+          destino.scrollIntoView({
+
+            behavior:'smooth',
+            block:'start'
+
+          });
+
+        }
+
+        nav.classList.remove('open');
+
+        overlay.classList.remove('active');
+
+      });
+
+    });
+
+    /* =====================================================
+       EXIBIÇÃO INICIAL
+    ====================================================== */
+
+    document.getElementById('promocoes').style.display = 'block';
+
+    /* =====================================================
+       TOTAL DOS PEDIDOS
+    ====================================================== */
+
+    let total = 0;
+
+    function alterar(id, valor, preco){
+
+      const elemento = document.getElementById(id);
+
+      let quantidade = Number(elemento.innerText);
+
+      quantidade += valor;
+
+      if(quantidade < 0){
+
+        return;
+
+      }
+
+      elemento.innerText = quantidade;
+
+      total += valor * preco;
+
+      if(total < 0){
+
+        total = 0;
+
+      }
+
+      document.getElementById('total').innerText = total.toFixed(2);
+
+    }
+
+  </script>
+
+</body>
+</html>
