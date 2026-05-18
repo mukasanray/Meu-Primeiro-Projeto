@@ -12,7 +12,7 @@ Landing page moderna e responsiva desenvolvida para uma hamburgueria fictícia c
 ## 📌 Funcionalidades
 
 * Menu hambúrguer responsivo
-* Sistema de navegação lateral
+* Sistema de navegação superior
 * Sessão de combos e hambúrgueres
 * Adicionais, molhos, bebidas e sorvetes
 * Área de contato e sugestões
